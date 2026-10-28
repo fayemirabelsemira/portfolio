@@ -137,9 +137,14 @@ h2::after{content:"";display:inline-block;width:.34em;height:.34em;margin-left:.
 .item::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(320px circle at var(--mx) var(--my),rgba(56,189,248,.2),transparent 70%);opacity:0;transition:opacity 300ms var(--ease-out)}
 .item:hover::before{opacity:1}
 .item>*{position:relative}
-/* Vertical phone-style videos — same treatment for all project cards */
-.item .video-frame{position:relative;width:100%;max-width:220px;margin:0 auto 16px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 12px 32px rgba(0,0,0,.45),0 0 0 1px rgba(120,170,230,.15)}
+/* Landscape videos for project cards */
+.item .video-frame{position:relative;width:100%;max-width:100%;margin:0 auto 16px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;box-shadow:0 12px 32px rgba(0,0,0,.45),0 0 0 1px rgba(120,170,230,.15)}
 .item video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+/* Hide fullscreen and overflow (3-dots) controls on video */
+.item video::-webkit-media-controls-fullscreen-button,
+.item video::-webkit-media-controls-overflow-button{
+  display:none!important;
+}
 .idx{display:block;font-family:var(--mono);font-size:.8125rem;color:var(--accent);margin-bottom:6px}
 .item h3{font-family:var(--display);font-weight:500;font-size:1.05rem;line-height:1.3;margin-bottom:8px}
 .item p{color:var(--mute);font-size:.92rem;flex:1}
@@ -190,7 +195,7 @@ footer{max-width:1180px;margin:0 auto;padding:36px 24px 130px;color:var(--mute);
   .work{padding:10vh 0}
   .panel{margin:0 -20px;padding-left:20px;padding-right:20px}
   .item{flex:0 0 min(300px,78vw);max-width:320px}
-  .item .video-frame{max-width:200px}
+  .item .video-frame{max-width:100%;border-radius:10px}
   .dock{gap:8px;padding:8px 12px}
   .dock-item{width:42px;height:42px}
 }
@@ -238,10 +243,10 @@ footer{max-width:1180px;margin:0 auto;padding:36px 24px 130px;color:var(--mute);
   .stack-card{padding:12px 6px;gap:10px}
   .stack-name{font-size:.75rem}
 
-  /* Projects swipe — vertical videos, card-focused */
+  /* Projects swipe — landscape videos, card-focused */
   .panel{margin:0 -16px;padding-left:16px;padding-right:16px;gap:14px;padding-bottom:8px}
   .item{flex:0 0 min(280px,84vw);max-width:300px;padding:14px}
-  .item .video-frame{max-width:180px;margin-bottom:12px;border-radius:12px}
+  .item .video-frame{max-width:100%;margin-bottom:12px;border-radius:10px}
   .item h3{font-size:.95rem}
   .item p{font-size:.85rem;line-height:1.5}
   .item .links{margin-top:12px;gap:14px;flex-wrap:wrap}
@@ -270,17 +275,8 @@ footer{max-width:1180px;margin:0 auto;padding:36px 24px 130px;color:var(--mute);
   .lanyard{--card:130px;--strap:40px}
   .float-stack{--fs:42px;height:210px}
   .item{flex:0 0 88vw;max-width:none}
-  .item .video-frame{max-width:160px}
+  .item .video-frame{max-width:100%}
   .stats{grid-template-columns:1fr}
 }
 
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
-
-/* Vertical phone-style videos — same treatment for all project cards */
-.item .video-frame{position:relative;width:100%;max-width:220px;margin:0 auto 16px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 12px 32px rgba(0,0,0,.45),0 0 0 1px rgba(120,170,230,.15)}
-.item video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;border-radius:inherit}
-/* Hide fullscreen and overflow (3-dots) controls on video */
-.item video::-webkit-media-controls-fullscreen-button,
-.item video::-webkit-media-controls-overflow-button {
-  display: none !important;
-}

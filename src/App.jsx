@@ -82,7 +82,6 @@ function Lanyard() {
     const z = zone.current, s = strap.current, h = hang.current
     const STRAP = () => parseFloat(getComputedStyle(z).getPropertyValue('--strap')) || 170
     let released = reduce()
-    // Starts tucked up under the welcome screen, then drops in and settles when the welcome lifts
     const st = { x: 0, y: released ? 0 : -STRAP() + 24, vx: 0, vy: 0 }
     const tgt = { x: 0, y: 0 }
     let dragging = false, p0 = { x: 0, y: 0 }, s0 = { x: 0, y: 0 }
@@ -107,7 +106,6 @@ function Lanyard() {
     const down = (e) => { if (!released) return; dragging = true; p0 = { x: e.clientX, y: e.clientY }; s0 = { x: st.x, y: st.y }; tgt.x = st.x; tgt.y = st.y; h.setPointerCapture(e.pointerId) }
     const move = (e) => {
       if (!dragging) return
-      // keep the whole card inside the window so it is never cut off
       const zr = z.getBoundingClientRect()
       const cx = zr.left + zr.width / 2, w = h.offsetWidth, ht = h.offsetHeight, top = zr.top + STRAP()
       tgt.x = clamp(s0.x + e.clientX - p0.x, -(cx - w / 2 - 8), window.innerWidth - cx - w / 2 - 8)
@@ -133,7 +131,7 @@ function Lanyard() {
   )
 }
 
-/* ---------- Background: the perspective-grid image, fixed behind everything ---------- */
+/* ---------- Background ---------- */
 function Backdrop() {
   return (
     <div className="backdrop" aria-hidden="true">
@@ -143,7 +141,7 @@ function Backdrop() {
   )
 }
 
-/* ---------- A tech logo. Logos flagged `knockout` (GSAP) have their black tile turned transparent ---------- */
+/* ---------- Logo ---------- */
 function Logo({ s }) {
   const [src, setSrc] = useState(s.knockout ? null : s.logo)
   useEffect(() => {
@@ -172,8 +170,7 @@ function Logo({ s }) {
   return src ? <img src={src} className={s.invert ? 'invert' : undefined} alt="" /> : null
 }
 
-/* ---------- Tech stack piled up in the intro: a cluttered, overlapping cluster. Each logo drifts, pops when touched,
-   swells toward the cursor, and gets shoved away when the ID card is dragged into it ---------- */
+/* ---------- Floating Stack ---------- */
 const PILE = {
   HTML: [20, 28, 1.05, -10], CSS: [40, 18, 1, 8], JavaScript: [61, 30, 1.1, -6], React: [82, 20, 1, 12],
   GSAP: [12, 62, 1, 6], Supabase: [33, 50, 0.9, -14], Git: [55, 60, 1.05, 10], GitHub: [76, 52, 1.1, -8],
@@ -198,7 +195,6 @@ function FloatingStack() {
       chip.addEventListener('pointerenter', over); chip.addEventListener('pointerleave', out)
       cleanups.push(() => { bob.kill(); chip.removeEventListener('pointerenter', over); chip.removeEventListener('pointerleave', out) })
     })
-    // every frame: cursor makes logos swell and lean in; the ID card shoves them out of its way
     const qx = items.map((el) => gsap.quickTo(el, 'x', { duration: 0.7, ease: 'power3' }))
     const qy = items.map((el) => gsap.quickTo(el, 'y', { duration: 0.7, ease: 'power3' }))
     const qs = items.map((el) => gsap.quickTo(el.querySelector('.fs-inner'), 'scale', { duration: 0.35, ease: 'power3' }))
@@ -252,8 +248,7 @@ function FloatingStack() {
   )
 }
 
-/* ---------- React Bits style: split text. Letters rise out of a mask.
-   The hero waits for the welcome screen; headings elsewhere play once when scrolled into view ---------- */
+/* ---------- SplitText ---------- */
 function SplitText({ text, as: Tag = 'h2', hero = false }) {
   const root = useRef(null)
   const lines = text.split('|')
@@ -285,7 +280,7 @@ function SplitText({ text, as: Tag = 'h2', hero = false }) {
   )
 }
 
-/* ---------- React Bits style: scroll reveal. Words brighten as you read down the page ---------- */
+/* ---------- ScrollReveal ---------- */
 function ScrollReveal({ text, className }) {
   const root = useRef(null)
   useEffect(() => {
@@ -300,7 +295,7 @@ function ScrollReveal({ text, className }) {
   return <p ref={root} className={className} aria-label={text}>{text.split(' ').map((w, i) => <span className="w" key={i} aria-hidden="true">{w} </span>)}</p>
 }
 
-/* ---------- React Bits style: count up ---------- */
+/* ---------- CountUp ---------- */
 function CountUp({ to }) {
   const el = useRef(null)
   useEffect(() => {
@@ -321,7 +316,7 @@ const stats = [
   { n: certificates.length, label: 'Certified in web design and development' },
 ]
 
-/* ---------- React Bits style: spotlight + tilt card (mouse devices only) ---------- */
+/* ---------- SpotlightCard ---------- */
 function SpotlightCard({ children, className }) {
   const r = useRef(null)
   useEffect(() => {
@@ -343,7 +338,7 @@ function SpotlightCard({ children, className }) {
   return <article ref={r} className={className}>{children}</article>
 }
 
-/* ---------- React Bits style: magnetic dock. Icons swell as the cursor nears ---------- */
+/* ---------- Dock ---------- */
 function Dock({ active, go }) {
   const root = useRef(null)
   useEffect(() => {
@@ -372,7 +367,7 @@ function Dock({ active, go }) {
   )
 }
 
-/* ---------- Tech stack: big logo cards, no tile behind the logos ---------- */
+/* ---------- TechGrid ---------- */
 function TechGrid() {
   const root = useRef(null)
   useEffect(() => {
@@ -395,6 +390,7 @@ function TechGrid() {
   )
 }
 
+/* ---------- HoverVideo (UPDATED - landscape + no fullscreen/3dots) ---------- */
 function HoverVideo({ src, poster, label }) {
   const v = useRef(null)
   const play = () => { if (!reduce()) v.current?.play().catch(() => {}) }
@@ -504,9 +500,7 @@ export default function App() {
   useEffect(() => {
     let lenis
     if (!reduce()) {
-      // Hold the hero copy back until the welcome screen lifts
       gsap.set('.hero-text > :not(.split)', { opacity: 0, y: 24 })
-      // Smooth scrolling (Lenis) driven by GSAP's ticker, kept in sync with ScrollTrigger
       lenis = new Lenis({ lerp: 0.09 })
       lenis.stop()
       lenis.on('scroll', ScrollTrigger.update)
