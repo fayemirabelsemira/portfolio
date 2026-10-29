@@ -18,14 +18,17 @@ export const projects = [
   { title: 'Jollibee Integrated Business Information System',
     text: 'An online ordering website paired with an operations dashboard for managing inventory, sales, suppliers, employees, payroll, and accounting. Built with HTML, CSS, JavaScript, and Supabase, and deployed on Cloudflare Pages.',
     video: '/videos/jollibee.mp4', poster: '/videos/jollibee.jpg',
+    tech: ['HTML', 'CSS', 'JavaScript', 'Supabase', 'Cloudflare'],
     live: 'https://jollibeewebsite.pages.dev/', repo: 'https://github.com/fayemirabelsemira/jollibee_redesign' },
   { title: "Sol's Collection",
     text: 'An online reading platform with a chapter reader, comments, bookmarks, and a writer studio. Built with HTML, CSS, JavaScript, Supabase, and Cloudflare.',
     video: '/videos/sols.mp4', poster: '/videos/sols.jpg',
+    tech: ['HTML', 'CSS', 'JavaScript', 'Supabase', 'Cloudflare'],
     live: 'https://sol.ladyysol.workers.dev/', repo: 'https://github.com/fayemirabelsemira/sols-collection' },
   { title: 'KnowMe',
     text: 'A study tool that turns notes into flashcards. Paste notes, generate cards, quiz yourself, and track progress. Built with HTML, CSS, JavaScript, and Cloudflare.',
     video: '/videos/knowme.mp4', poster: '/videos/knowme.jpg',
+    tech: ['HTML', 'CSS', 'JavaScript', 'Cloudflare'],
     live: '#', repo: '#' },
 ]
 

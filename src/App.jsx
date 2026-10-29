@@ -1,4 +1,5 @@
 import { cloneElement, useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
@@ -75,18 +76,57 @@ function Magnetic({ children }) {
   return cloneElement(children, { ref: r })
 }
 
-/* ---------- ID card on a lanyard: drag it, it swings back ---------- */
+/* ---------- ID card on a flexible lace: drag it, the lace bends and the card swings back ---------- */
 function Lanyard() {
-  const zone = useRef(null), strap = useRef(null), hang = useRef(null)
+  const zone = useRef(null), ropeA = useRef(null), ropeB = useRef(null), hang = useRef(null)
   useEffect(() => {
-    const z = zone.current, s = strap.current, h = hang.current
+    const z = zone.current, h = hang.current
     const STRAP = () => parseFloat(getComputedStyle(z).getPropertyValue('--strap')) || 170
     let released = reduce()
     const st = { x: 0, y: released ? 0 : -STRAP() + 24, vx: 0, vy: 0 }
     const tgt = { x: 0, y: 0 }
     let dragging = false, p0 = { x: 0, y: 0 }, s0 = { x: 0, y: 0 }
-    gsap.set([s, h], { transformOrigin: '50% 0' })
+    gsap.set(h, { transformOrigin: '50% 0' })
     const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi)
+
+    /* the lace: a chain of points (verlet rope) from the anchor to the clip */
+    const N = 14
+    const pts = Array.from({ length: N }, (_, i) => {
+      const t = i / (N - 1), x = st.x * t, y = (STRAP() + st.y) * t
+      return { x, y, px: x, py: y }
+    })
+    const draw = () => {
+      let d = `M${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`
+      for (let i = 0; i < N - 1; i++) {
+        const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2
+        d += `C${(p1.x + (p2.x - p0.x) / 6).toFixed(1)},${(p1.y + (p2.y - p0.y) / 6).toFixed(1)} ${(p2.x - (p3.x - p1.x) / 6).toFixed(1)},${(p2.y - (p3.y - p1.y) / 6).toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`
+      }
+      ropeA.current.setAttribute('d', d)
+      ropeB.current.setAttribute('d', d)
+    }
+    const rope = () => {
+      const L = STRAP(), ex = st.x, ey = L + st.y
+      const seg = Math.max(L, Math.hypot(ex, ey)) / (N - 1)
+      for (let i = 1; i < N - 1; i++) {
+        const p = pts[i], vx = (p.x - p.px) * 0.96, vy = (p.y - p.py) * 0.96
+        p.px = p.x; p.py = p.y
+        p.x += vx; p.y += vy + 0.4
+      }
+      pts[0].x = 0; pts[0].y = 0
+      pts[N - 1].x = ex; pts[N - 1].y = ey
+      for (let it = 0; it < 10; it++) {
+        for (let i = 0; i < N - 1; i++) {
+          const a = pts[i], b = pts[i + 1]
+          const dx = b.x - a.x, dy = b.y - a.y, dist = Math.hypot(dx, dy) || 0.0001
+          const k = (dist - seg) / dist
+          const wa = i === 0 ? 0 : i + 1 === N - 1 ? 1 : 0.5, wb = i === 0 ? 1 : i + 1 === N - 1 ? 0 : 0.5
+          a.x += dx * k * wa; a.y += dy * k * wa
+          b.x -= dx * k * wb; b.y -= dy * k * wb
+        }
+      }
+      draw()
+    }
+
     const tick = (t) => {
       let tx = 0, ty = 0
       if (dragging) { tx = tgt.x; ty = tgt.y }
@@ -97,8 +137,8 @@ function Lanyard() {
       st.vy = (st.vy + (ty - st.y) * k) * (dragging ? 0.62 : 0.93); st.y += st.vy
       const len = Math.max(STRAP() + st.y, 12)
       const ang = (Math.atan2(st.x, len) * 180) / Math.PI
-      gsap.set(s, { height: Math.hypot(st.x, len), rotation: -ang })
       gsap.set(h, { x: st.x, y: st.y, rotation: -ang - st.vx * 0.8 })
+      rope()
     }
     gsap.ticker.add(tick)
     const release = () => { released = true }
@@ -118,13 +158,18 @@ function Lanyard() {
   }, [])
   return (
     <div className="lanyard" ref={zone}>
-      <div className="strap" ref={strap} />
+      <svg className="rope" aria-hidden="true">
+        <path ref={ropeA} className="rope-a" />
+        <path ref={ropeB} className="rope-b" />
+      </svg>
       <div className="spacer" />
       <div className="hang" ref={hang} aria-label="ID card of Faye Semira. Drag it in any direction.">
         <div className="clip" />
-        <div className="card">
-          <img src="/faye.png" alt="Portrait of Faye Semira" draggable="false" />
-          <div className="card-meta"><strong>{profile.name}</strong><span>{profile.role}</span></div>
+        <div className="card-frame">
+          <div className="card">
+            <img src="/faye.png" alt="Portrait of Faye Semira" draggable="false" />
+            <div className="card-meta"><strong>{profile.name}</strong><span>{profile.role}</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -390,42 +435,129 @@ function TechGrid() {
   )
 }
 
-/* ---------- HoverVideo (UPDATED - landscape + no fullscreen/3dots) ---------- */
-function HoverVideo({ src, poster, label }) {
+/* ---------- Card video: plays on hover, click opens the expanded view ---------- */
+function HoverVideo({ src, poster, label, onOpen }) {
   const v = useRef(null)
   const play = () => { if (!reduce()) v.current?.play().catch(() => {}) }
   const stop = () => v.current?.pause()
+  const key = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen() } }
   return (
-    <div className="video-frame">
-      <video
-        ref={v}
-        src={src}
-        poster={poster}
-        controls
-        controlsList="nofullscreen nodownload noremoteplayback"
-        disablePictureInPicture
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-label={label}
-        onPointerEnter={play}
-        onPointerLeave={stop}
-        onFocus={play}
-        onBlur={stop}
-      />
+    <div
+      className="video-frame openable laptop"
+      role="button"
+      tabIndex={0}
+      aria-label={label + ' demo video. Open details'}
+      onClick={onOpen}
+      onKeyDown={key}
+      onPointerEnter={play}
+      onPointerLeave={stop}
+      onFocus={play}
+      onBlur={stop}
+    >
+      <video ref={v} src={src} poster={poster} muted loop playsInline preload="metadata" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
+      <img className="laptop-img" src="/images/laptop.png" alt="" aria-hidden="true" draggable="false" />
+      <span className="expand-hint" aria-hidden="true">
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5 9 7M2.5 13.5 7 9" /></svg>
+        Click to expand
+      </span>
     </div>
+  )
+}
+
+/* ---------- Expanded view: big video, description, tech stack used ---------- */
+function ProjectModal({ project, index, onClose }) {
+  const back = useRef(null), panel = useRef(null), closeBtn = useRef(null), vid = useRef(null)
+  const closing = useRef(false)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
+
+  const close = useCallback(() => {
+    if (closing.current) return
+    closing.current = true
+    if (reduce()) { onCloseRef.current(); return }
+    gsap.to(back.current, { opacity: 0, duration: 0.2, ease: 'power2.out' })
+    gsap.to(panel.current, { y: 12, scale: 0.98, opacity: 0, duration: 0.2, ease: 'power2.out', onComplete: () => onCloseRef.current() })
+  }, [])
+
+  useEffect(() => {
+    const prevFocus = document.activeElement
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.__lenis?.stop()
+    if (!reduce()) {
+      gsap.fromTo(back.current, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' })
+      gsap.fromTo(panel.current, { y: 28, scale: 0.96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: 'power3.out' })
+    }
+    closeBtn.current?.focus()
+    const onKey = (e) => {
+      if (e.key === 'Escape') { close(); return }
+      if (e.key !== 'Tab') return
+      const f = [...panel.current.querySelectorAll('a[href],button,[tabindex]:not([tabindex="-1"])')]
+      if (!f.length) return
+      const first = f[0], last = f[f.length - 1]
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+      window.__lenis?.start()
+      prevFocus?.focus?.()
+    }
+  }, [close])
+
+  const play = () => { if (!reduce()) vid.current?.play().catch(() => {}) }
+  const stop = () => vid.current?.pause()
+  const tech = (project.tech || []).map((n) => stack.find((s) => s.name === n)).filter(Boolean)
+
+  return createPortal(
+    <div className="m-back" ref={back} onClick={(e) => { if (e.target === e.currentTarget) close() }}>
+      <div className="m-panel" ref={panel} role="dialog" aria-modal="true" aria-labelledby="m-title" data-lenis-prevent>
+        <button className="m-close" ref={closeBtn} onClick={close} aria-label="Close details">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+        {project.video && (
+          <div className="m-video laptop" onPointerEnter={play} onPointerLeave={stop}>
+            <video ref={vid} src={project.video} poster={project.poster} controls controlsList="nodownload noremoteplayback nofullscreen" disablePictureInPicture muted loop playsInline preload="auto" aria-label={project.title + ' demo video'} />
+            <img className="laptop-img" src="/images/laptop.png" alt="" aria-hidden="true" draggable="false" />
+          </div>
+        )}
+        <div className="m-right">
+          <span className="idx">0{index + 1}</span>
+          <h3 id="m-title">{project.title}</h3>
+          <p>{project.text}</p>
+          <div className="links">
+            {project.live && project.live !== '#' && <a href={project.live} target="_blank" rel="noreferrer">View live site <Arrow /></a>}
+            {project.repo && project.repo !== '#' && <a href={project.repo} target="_blank" rel="noreferrer">View code <Arrow /></a>}
+          </div>
+        </div>
+        {tech.length > 0 && (
+          <div className="m-tech-wrap">
+            <h4 className="m-tech-title">Tech stack used:</h4>
+            <ul className="m-tech">
+              {tech.map((s) => (
+                <li key={s.name}><span className="stack-icon"><Logo s={s} /></span><span className="stack-name">{s.name}</span></li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>,
+    document.body
   )
 }
 
 function Portfolio() {
   const [tab, setTab] = useState('Projects')
+  const [open, setOpen] = useState(null)
   const panel = useRef(null)
   useEffect(() => {
     if (!reduce() && panel.current) gsap.fromTo(panel.current.children, { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: 'power3.out' })
   }, [tab])
   const isSwipe = tab === 'Projects'
   return (
+    <>
     <section id="portfolio" className="work">
       <div className="wrap">
       <p className="eyebrow">Selected work</p>
@@ -439,9 +571,9 @@ function Portfolio() {
       <div className={'panel' + (isSwipe ? '' : ' grid-mode')} ref={panel}>
         {tab === 'Projects' && projects.map((p, i) => (
           <SpotlightCard className="item" key={p.title}>
-            {p.video && <HoverVideo src={p.video} poster={p.poster} label={p.title + ' demo video'} />}
+            {p.video && <HoverVideo src={p.video} poster={p.poster} label={p.title} onOpen={() => setOpen(i)} />}
             <span className="idx">0{i + 1}</span>
-            <h3>{p.title}</h3><p>{p.text}</p>
+            <h3>{p.title}</h3>
             <div className="links">
               {p.live && p.live !== '#' && <a href={p.live} target="_blank" rel="noreferrer">View live site <Arrow /></a>}
               {p.repo && p.repo !== '#' && <a href={p.repo} target="_blank" rel="noreferrer">View code <Arrow /></a>}
@@ -458,6 +590,8 @@ function Portfolio() {
       </div>
       </div>
     </section>
+    {open !== null && <ProjectModal project={projects[open]} index={open} onClose={() => setOpen(null)} />}
+    </>
   )
 }
 
