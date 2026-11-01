@@ -1,4 +1,4 @@
-# Faye Semira portfolio (React + Vite + GSAP + Lenis)
+(React + Vite + GSAP + Lenis)
 
     npm install
     npm run dev        # local preview
