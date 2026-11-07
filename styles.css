@@ -251,4 +251,7 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .hero-copy{display:block}
   .avatar{margin:0 0 8px}
   .hero-side{padding-top:4px}
+  /* View Projects + Resume side by side */
+  .hero-copy .actions{flex-wrap:nowrap;gap:6px}
+  .hero-copy .actions .btn{flex:1 1 0;min-width:0;padding:8px 4px;font-size:.74rem;white-space:nowrap}
 }
