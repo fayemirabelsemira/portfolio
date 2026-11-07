@@ -247,11 +247,12 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .hero{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:24px;align-items:center}
 }
 @media(max-width:600px){
-  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);gap:12px;align-items:start;padding-top:12px}
-  .hero-copy{display:block}
-  .avatar{margin:0 0 8px}
-  .hero-side{padding-top:4px}
-  /* View Projects + Resume side by side */
-  .hero-copy .actions{flex-wrap:nowrap;gap:6px}
-  .hero-copy .actions .btn{flex:1 1 0;min-width:0;padding:8px 4px;font-size:.74rem;white-space:nowrap}
+  /* details left + player right, then the buttons across the full width */
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);column-gap:12px;row-gap:0;align-items:start;padding-top:12px}
+  .hero-copy{display:contents}
+  .hero .avatar{grid-column:1;grid-row:auto;margin:0 0 8px}
+  .hero .role,.hero .tagline,.hero .stack,.hero .open{grid-column:1}
+  .hero-side{grid-column:2;grid-row:1/7;padding-top:4px}
+  .hero .actions{grid-column:1/-1;flex-wrap:nowrap;gap:10px;margin-top:14px}
+  .hero .actions .btn{flex:1 1 0;min-width:0;padding:11px 8px;font-size:.9rem;white-space:nowrap}
 }
