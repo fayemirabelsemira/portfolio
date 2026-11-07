@@ -1,15 +1,107 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Faye Semira · Web Developer</title>
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#030b18" />
-    <meta name="description" content="Portfolio of Faye Semira, a web developer building clean, responsive websites." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  </head>
-  <body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Faye Semira · Web Developer</title>
+  <meta name="description" content="Portfolio of Faye Lynette Semira, web developer. Responsive web apps built with HTML, CSS, JavaScript, Supabase and Cloudflare." />
+  <meta name="author" content="Faye Lynette Semira" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Faye Semira · Web Developer" />
+  <meta property="og:description" content="Responsive web apps from interface to database." />
+  <meta property="og:image" content="og.jpg" />
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="nav-in">
+      <a class="brand" href="#home">Faye Semira</a>
+      <nav class="links" aria-label="Sections">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
+      </nav>
+      <button id="theme" class="btn ghost small" type="button" aria-label="Switch theme">Light theme</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section id="home" class="hero wrap">
+      <div class="hero-copy">
+        <img class="avatar" src="faye.png" alt="Portrait of Faye Semira" width="96" height="96" />
+        <p class="role">Web Developer</p>
+        <h1>Faye Semira</h1>
+        <p class="tagline">I build clean, responsive websites from the interface to the database.</p>
+        <p class="stack">Stack: HTML, CSS, JavaScript, React, Node.js, Supabase</p>
+        <p class="open">Open to internships and junior web developer roles</p>
+        <div class="actions">
+          <a class="btn primary" href="#projects">View Projects</a>
+          <a class="btn ghost" href="resume.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </div>
+
+      <figure class="hero-demo">
+        <div class="frame">
+          <img src="images/jollibee.jpg" alt="Screenshot of the Jollibee Integrated Business Information System" />
+        </div>
+        <figcaption>Jollibee Integrated Business Information System, my featured project.</figcaption>
+      </figure>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="wrap section">
+      <h2>Featured Projects</h2>
+      <div class="chips" role="group" aria-label="Filter projects">
+        <button class="chip on" data-f="All" type="button" aria-pressed="true">All</button>
+        <button class="chip" data-f="Frontend" type="button" aria-pressed="false">Frontend</button>
+        <button class="chip" data-f="Full-Stack" type="button" aria-pressed="false">Full-Stack</button>
+      </div>
+      <p id="count" class="muted" aria-live="polite"></p>
+      <div id="grid" class="grid"></div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="wrap section">
+      <h2>Skills</h2>
+      <h3 class="sub">Tech stack</h3>
+      <ul id="tech" class="tech"></ul>
+      <h3 class="sub">Soft skills</h3>
+      <ul id="soft" class="pills"></ul>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="wrap section">
+      <h2>About</h2>
+      <p class="about-text">I build full websites from the interface to the database and deploy them online. I care about layouts that are clear, fast and easy to use on any screen.</p>
+      <dl class="edu">
+        <div><dt>School</dt><dd>De La Salle Lipa</dd></div>
+        <div><dt>Course</dt><dd>Information Technology</dd></div>
+        <div><dt>Elective</dt><dd>Cloud Computing</dd></div>
+      </dl>
+      <h3 class="sub">Certificate</h3>
+      <a class="cert" href="https://www.linkedin.com/learning/certificates/31bd9ead9d495f6e69c978788d78a7710006c57eb9469d25b1577c914602f0b3" target="_blank" rel="noreferrer">
+        <strong>Web Design and Web Development</strong>
+        <span>LinkedIn Learning certificate ↗</span>
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="wrap foot">
+    <p class="social">
+      <a href="https://www.linkedin.com/in/faye-semira/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+      <a href="https://github.com/fayemirabelsemira" target="_blank" rel="noreferrer">GitHub ↗</a>
+      <a href="mailto:fayesemira21@gmail.com">fayesemira21@gmail.com</a>
+    </p>
+    <p>© <span id="yr"></span> Faye Semira</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
 </html>

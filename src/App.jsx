@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import { profile, projects, certificates, stack, softSkills } from './data'
+import { profile, projects, certificates, stack, extraTech, softSkills, asset } from './data'
 
 gsap.registerPlugin(ScrollTrigger)
 const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -167,7 +167,7 @@ function Lanyard() {
         <div className="clip" />
         <div className="card-frame">
           <div className="card">
-            <img src="/faye.png" alt="Portrait of Faye Semira" draggable="false" />
+            <img src={asset('faye.png')} alt="Portrait of Faye Semira" draggable="false" />
             <div className="card-meta"><strong>{profile.name}</strong><span>{profile.role}</span></div>
           </div>
         </div>
@@ -248,8 +248,9 @@ function FloatingStack() {
     const lv = () => { cur.on = false }
     if (finePointer()) { window.addEventListener('pointermove', mv); document.documentElement.addEventListener('pointerleave', lv) }
     const card = document.querySelector('.hang')
-    const PUSH = 90
     const tick = () => {
+      const small = window.innerWidth <= 700
+      const PUSH = small ? 34 : 90, FORCE = small ? 50 : 170, BASE = small ? 8 : 30
       const cr = card ? card.getBoundingClientRect() : null
       items.forEach((el, i) => {
         const b = el.getBoundingClientRect()
@@ -265,7 +266,7 @@ function FloatingStack() {
           let dx = cx - nx, dy = cy - ny, d = Math.hypot(dx, dy)
           if (d < PUSH) {
             if (d === 0) { dx = cx - (cr.left + cr.right) / 2; dy = cy - (cr.top + cr.bottom) / 2; d = Math.hypot(dx, dy) || 1 }
-            const f = (1 - Math.min(d, PUSH) / PUSH) * 170 + 30
+            const f = (1 - Math.min(d, PUSH) / PUSH) * FORCE + BASE
             tx += dx / d * f; ty += dy / d * f
           }
         }
@@ -455,10 +456,10 @@ function HoverVideo({ src, poster, label, onOpen }) {
       onBlur={stop}
     >
       <video ref={v} src={src} poster={poster} muted loop playsInline preload="metadata" disablePictureInPicture aria-hidden="true" tabIndex={-1} />
-      <img className="laptop-img" src="/images/laptop.png" alt="" aria-hidden="true" draggable="false" />
+      <img className="laptop-img" src={asset('images/laptop.png')} alt="" aria-hidden="true" draggable="false" />
       <span className="expand-hint" aria-hidden="true">
         <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5 9 7M2.5 13.5 7 9" /></svg>
-        Click to expand
+        <span className="hint-desktop">Click</span><span className="hint-touch">Tap</span>&nbsp;to expand
       </span>
     </div>
   )
@@ -487,12 +488,13 @@ function ProjectModal({ project, index, onClose }) {
     if (!reduce()) {
       gsap.fromTo(back.current, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' })
       gsap.fromTo(panel.current, { y: 28, scale: 0.96, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: 'power3.out' })
+      vid.current?.play().catch(() => {})
     }
     closeBtn.current?.focus()
     const onKey = (e) => {
       if (e.key === 'Escape') { close(); return }
       if (e.key !== 'Tab') return
-      const f = [...panel.current.querySelectorAll('a[href],button,[tabindex]:not([tabindex="-1"])')]
+      const f = [...panel.current.querySelectorAll('a[href],button,[tabindex]:not([tabindex="-1"])')].filter((el) => el.getClientRects().length)
       if (!f.length) return
       const first = f[0], last = f[f.length - 1]
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
@@ -508,8 +510,7 @@ function ProjectModal({ project, index, onClose }) {
   }, [close])
 
   const play = () => { if (!reduce()) vid.current?.play().catch(() => {}) }
-  const stop = () => vid.current?.pause()
-  const tech = (project.tech || []).map((n) => stack.find((s) => s.name === n)).filter(Boolean)
+  const tech = (project.tech || []).map((n) => [...stack, ...extraTech].find((s) => s.name === n)).filter(Boolean)
 
   return createPortal(
     <div className="m-back" ref={back} onClick={(e) => { if (e.target === e.currentTarget) close() }}>
@@ -518,9 +519,9 @@ function ProjectModal({ project, index, onClose }) {
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
         </button>
         {project.video && (
-          <div className="m-video laptop" onPointerEnter={play} onPointerLeave={stop}>
+          <div className="m-video laptop" onPointerEnter={play}>
             <video ref={vid} src={project.video} poster={project.poster} controls controlsList="nodownload noremoteplayback nofullscreen" disablePictureInPicture muted loop playsInline preload="auto" aria-label={project.title + ' demo video'} />
-            <img className="laptop-img" src="/images/laptop.png" alt="" aria-hidden="true" draggable="false" />
+            <img className="laptop-img" src={asset('images/laptop.png')} alt="" aria-hidden="true" draggable="false" />
           </div>
         )}
         <div className="m-right">
@@ -542,6 +543,7 @@ function ProjectModal({ project, index, onClose }) {
             </ul>
           </div>
         )}
+        <button className="m-done" onClick={close}>Close</button>
       </div>
     </div>,
     document.body
@@ -596,13 +598,31 @@ function Portfolio() {
 }
 
 function Contact() {
-  const [sent, setSent] = useState(false)
-  const submit = (e) => {
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
+  const submit = async (e) => {
     e.preventDefault()
-    const f = new FormData(e.target)
-    const body = `${f.get('message')}\n\n${f.get('name')} (${f.get('email')})`
-    window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent('Portfolio message from ' + f.get('name'))}&body=${encodeURIComponent(body)}`
-    setSent(true)
+    const form = e.target
+    const f = new FormData(form)
+    if (f.get('botcheck')) return // spam trap
+    setStatus('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: profile.formKey,
+          subject: 'Portfolio message from ' + f.get('name'),
+          from_name: 'Portfolio website',
+          name: f.get('name'),
+          email: f.get('email'),
+          message: f.get('message'),
+        }),
+      })
+      const data = await res.json()
+      if (data.success) { setStatus('sent'); form.reset() } else setStatus('error')
+    } catch {
+      setStatus('error')
+    }
   }
   return (
     <section id="contact" className="sec contact">
@@ -610,11 +630,13 @@ function Contact() {
       <SplitText text="Let’s talk" />
       <p className="lead">Have a project or a role in mind? Send me a message.</p>
       <form onSubmit={submit}>
+        <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" style={{ display: 'none' }} />
         <label>Name<input name="name" required autoComplete="name" /></label>
         <label>Email<input name="email" type="email" required autoComplete="email" /></label>
         <label>Message<textarea name="message" rows="5" required /></label>
-        <Magnetic><button type="submit">Send message</button></Magnetic>
-        {sent && <p role="status" className="note">Your email app should open with the message ready to send.</p>}
+        <Magnetic><button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : 'Send message'}</button></Magnetic>
+        {status === 'sent' && <p role="status" className="note">Thanks! Your message was sent. I’ll reply by email soon.</p>}
+        {status === 'error' && <p role="alert" className="note">Something went wrong. Please try again, or email me at {profile.email}.</p>}
       </form>
       <p className="social"><a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn <Arrow /></a><a href={profile.github} target="_blank" rel="noreferrer">GitHub <Arrow /></a></p>
     </section>
@@ -690,10 +712,6 @@ export default function App() {
                 <div className="stat" key={s.label}><CountUp to={s.n} /><p>{s.label}</p></div>
               ))}
             </div>
-            <h3 className="group">Tech stack</h3>
-            <TechGrid />
-            <h3 className="group">Soft skills</h3>
-            <div className="chips">{softSkills.map((s) => <span className="chip" key={s}>{s}</span>)}</div>
           </section>
           <Portfolio />
           <Contact />

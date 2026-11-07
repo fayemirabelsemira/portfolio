@@ -1,4 +1,10 @@
 // Edit everything here. Items marked TODO are still placeholders.
+
+// Prefixes a public-folder path with the site's base URL.
+// Locally this is "/", on GitHub Pages it becomes "/portfolio/".
+// Always pass paths WITHOUT a leading slash: asset('logos/html.png')
+export const asset = (p) => import.meta.env.BASE_URL + p
+
 export const profile = {
   name: 'Faye Semira',
   role: 'Web Developer',
@@ -9,25 +15,26 @@ export const profile = {
     { label: 'Course', value: 'Information Technology' },
     { label: 'Elective', value: 'Cloud Computing' },
   ],
-  email: 'fayemirabelsemira14@gmail.com',
+  email: 'fayesemira21@gmail.com',
+  formKey: '06541dda-2895-4728-aaab-1c81eafa5afa', // free key from web3forms.com (see steps)
   linkedin: 'https://www.linkedin.com/in/faye-semira/',
   github: 'https://github.com/fayemirabelsemira',
 }
 
 export const projects = [
   { title: 'Jollibee Integrated Business Information System',
-    text: 'An online ordering website paired with an operations dashboard for managing inventory, sales, suppliers, employees, payroll, and accounting. Built with HTML, CSS, JavaScript, and Supabase, and deployed on Cloudflare Pages.',
-    video: '/videos/jollibee.mp4', poster: '/videos/jollibee.jpg',
-    tech: ['HTML', 'CSS', 'JavaScript', 'Supabase', 'Cloudflare'],
-    live: 'https://jollibeewebsite.pages.dev/', repo: 'https://github.com/fayemirabelsemira/jollibee_redesign' },
+    text: 'An online ordering website paired with an operations dashboard for managing inventory, sales, suppliers, employees, payroll, and accounting. Built with HTML, CSS, JavaScript, and PHP, and deployed on InfinityFree.',
+    video: asset('videos/jollibee.mp4'), poster: asset('videos/jollibee.jpg'),
+    tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'InfinityFree'],
+    live: 'https://jollibeewebsite.infinityfreeapp.com/', repo: 'https://github.com/fayemirabelsemira/jollibee_redesign' },
   { title: "Sol's Collection",
     text: 'An online reading platform with a chapter reader, comments, bookmarks, and a writer studio. Built with HTML, CSS, JavaScript, Supabase, and Cloudflare.',
-    video: '/videos/sols.mp4', poster: '/videos/sols.jpg',
+    video: asset('videos/sols.mp4'), poster: asset('videos/sols.jpg'),
     tech: ['HTML', 'CSS', 'JavaScript', 'Supabase', 'Cloudflare'],
     live: 'https://sol.ladyysol.workers.dev/', repo: 'https://github.com/fayemirabelsemira/sols-collection' },
   { title: 'KnowMe',
     text: 'A study tool that turns notes into flashcards. Paste notes, generate cards, quiz yourself, and track progress. Built with HTML, CSS, JavaScript, and Cloudflare.',
-    video: '/videos/knowme.mp4', poster: '/videos/knowme.jpg',
+    video: asset('videos/knowme.mp4'), poster: asset('videos/knowme.jpg'),
     tech: ['HTML', 'CSS', 'JavaScript', 'Cloudflare'],
     live: '#', repo: '#' },
 ]
@@ -38,16 +45,22 @@ export const certificates = [
 ]
 
 export const stack = [
-  { name: 'HTML', logo: '/logos/html.png' },
-  { name: 'CSS', logo: '/logos/css.png' },
-  { name: 'JavaScript', logo: '/logos/javascript.png' },
-  { name: 'React', logo: '/logos/react.png' },
-  { name: 'GSAP', logo: '/logos/gsap.png', knockout: true },
-  { name: 'Supabase', logo: '/logos/supabase.png' },
-  { name: 'Git', logo: '/logos/git.png' },
-  { name: 'GitHub', logo: '/logos/github.png', invert: true },
-  { name: 'VS Code', logo: '/logos/vscode.png' },
-  { name: 'Cloudflare', logo: '/logos/cloudflare.png' },
+  { name: 'HTML', logo: asset('logos/html.png') },
+  { name: 'CSS', logo: asset('logos/css.png') },
+  { name: 'JavaScript', logo: asset('logos/javascript.png') },
+  { name: 'React', logo: asset('logos/react.png') },
+  { name: 'GSAP', logo: asset('logos/gsap.png'), knockout: true },
+  { name: 'Supabase', logo: asset('logos/supabase.png') },
+  { name: 'Git', logo: asset('logos/git.png') },
+  { name: 'GitHub', logo: asset('logos/github.png'), invert: true },
+  { name: 'VS Code', logo: asset('logos/vscode.png') },
+  { name: 'Cloudflare', logo: asset('logos/cloudflare.png') },
+]
+
+// Logos used only in a project's "Tech stack used" list (not shown in the hero or skills grid).
+export const extraTech = [
+  { name: 'PHP', logo: asset('logos/php.png') },
+  { name: 'InfinityFree', logo: asset('logos/infinityfree.png') },
 ]
 
 export const softSkills = ['Problem solving', 'Attention to detail', 'Communication', 'Teamwork', 'Time management', 'Quick learner', 'Creativity']
