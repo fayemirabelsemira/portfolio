@@ -171,3 +171,58 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .foot{margin-top:24px;padding-top:12px;padding-bottom:20px;font-size:.78rem}
   .social{gap:14px;margin-bottom:6px;font-size:.8rem}
 }
+
+/* ===== Extra-small phone layout (tighter than the block above) ===== */
+@media(max-width:600px){
+  html{scroll-padding-top:46px}
+  body{font-size:.85rem;line-height:1.45}
+  .nav-in{flex-wrap:nowrap;gap:10px;padding:7px 12px}
+  .brand{font-size:.85rem}
+  .links{order:0;width:auto;margin:0 auto 0 0;gap:10px;padding:0;overflow:visible}
+  .links a{font-size:.78rem}
+  .btn.small{padding:5px 9px;font-size:.7rem;margin-left:0;border-radius:8px}
+  .wrap{padding:0 12px}
+
+  .hero{padding-top:10px;padding-bottom:0}
+  .hero-copy{grid-template-columns:54px 1fr;column-gap:10px}
+  .avatar{width:54px;height:54px}
+  .role{font-size:.7rem}
+  h1{font-size:1.35rem}
+  .tagline{font-size:.88rem;margin-top:8px}
+  .stack{font-size:.72rem;margin-top:4px}
+  .open{font-size:.78rem;margin-top:4px}
+  .actions{margin-top:8px;gap:8px}
+  .actions .btn{padding:7px 12px;font-size:.8rem;border-radius:8px}
+
+  .section{padding-top:14px}
+  h2{font-size:1.05rem;margin-bottom:6px}
+  .sub{font-size:.72rem;margin:8px 0 6px}
+
+  .chips{gap:5px;margin-bottom:8px}
+  .chip{padding:4px 10px;font-size:.72rem;border-radius:7px}
+  .grid{gap:10px;margin:0 -12px;padding:0 12px 4px}
+  .card{flex:0 0 66%;padding:8px;border-radius:12px}
+  .thumb{margin-bottom:6px;border-radius:6px}
+  .card h3{font-size:.85rem;margin:2px 0}
+  .meta{font-size:.7rem}
+  .card p{font-size:.74rem;-webkit-line-clamp:1}
+  .card .st{font-size:.68rem;margin-top:2px;-webkit-line-clamp:1}
+  .card .actions{padding-top:6px;gap:6px}
+  .card .actions .btn{padding:6px 8px;font-size:.72rem;border-radius:7px}
+
+  .tech{gap:5px}
+  .tech li{padding:5px 1px;gap:2px;font-size:.56rem;border-radius:8px}
+  .tech img{width:20px;height:20px}
+  .pills{gap:4px}
+  .pills li{padding:3px 8px;font-size:.66rem}
+
+  .about-text{font-size:.8rem}
+  .edu{gap:6px;margin-top:8px}
+  .edu dt{font-size:.52rem}
+  .edu dd{font-size:.7rem}
+  .cert{padding:8px 10px;border-radius:10px}
+  .cert strong{font-size:.8rem}
+  .cert span{font-size:.72rem}
+  .foot{margin-top:14px;padding-top:8px;padding-bottom:14px;font-size:.7rem}
+  .social{gap:10px;margin-bottom:4px;font-size:.72rem}
+}
