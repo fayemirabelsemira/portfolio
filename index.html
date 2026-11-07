@@ -38,9 +38,6 @@
         <img class="avatar" src="faye.png" alt="Portrait of Faye Semira" width="96" height="96" />
         <p class="role">Web Developer</p>
         <h1>Faye Semira</h1>
-        <div class="spotify spotify-mobile">
-          <iframe title="Spotify song" src="https://open.spotify.com/embed/track/1TnUURhehaoMWKAqQtirm6?utm_source=generator&theme=0&si=a9b48348be354f05" width="100%" height="250" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        </div>
         <p class="tagline">I build clean, responsive websites from the interface to the database.</p>
         <p class="stack">Stack: HTML, CSS, JavaScript, React, Node.js, Supabase</p>
         <p class="open">Open to internships and junior web developer roles</p>
@@ -51,16 +48,9 @@
       </div>
 
       <aside class="hero-side">
-        <div class="spotify">
-          <iframe title="Spotify song" data-testid="embed-iframe" src="https://open.spotify.com/embed/track/1TnUURhehaoMWKAqQtirm6?utm_source=generator&theme=0&si=a9b48348be354f05" width="100%" height="352" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <div class="spotify" id="spotify">
+          <iframe title="Spotify song" data-testid="embed-iframe" src="https://open.spotify.com/embed/track/1TnUURhehaoMWKAqQtirm6?utm_source=generator&theme=0&si=a9b48348be354f05" width="300" height="352" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
-
-        <figure class="hero-demo">
-          <div class="frame">
-            <img src="images/jollibee.jpg" alt="Screenshot of the Jollibee Integrated Business Information System" />
-          </div>
-          <figcaption>Jollibee Integrated Business Information System, my featured project.</figcaption>
-        </figure>
       </aside>
     </section>
 
@@ -111,6 +101,20 @@
     </p>
     <p>© <span id="yr"></span> Faye Semira</p>
   </footer>
+  <script>
+    /* Scales the Spotify card down to fit its column (never above 100%) */
+    (function(){
+      var box=document.getElementById('spotify'); if(!box) return;
+      var W=300,H=352,col=box.parentElement;
+      function fit(){
+        var s=Math.min(1,col.clientWidth/W);
+        box.style.setProperty('--sp',s);
+        box.style.width=(W*s)+'px'; box.style.height=(H*s)+'px';
+      }
+      fit(); window.addEventListener('resize',fit);
+      if(window.ResizeObserver) new ResizeObserver(fit).observe(col);
+    })();
+  </script>
   <script src="script.js"></script>
 </body>
 </html>

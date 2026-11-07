@@ -227,26 +227,28 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .social{gap:10px;margin-bottom:4px;font-size:.72rem}
 }
 
-/* ===== Hero right column + Spotify player ===== */
-.hero-side{display:grid;gap:20px;align-content:center;min-width:0}
+/* ===== Hero: details on the left, Spotify card on the right (all screen sizes) ===== */
+.hero-side{display:flex;justify-content:center;align-items:center;min-width:0}
 .spotify{
-  background:var(--card);              /* site card colour behind the player */
-  border:1px solid var(--line);
-  border-radius:12px;overflow:hidden;isolation:isolate;
+  position:relative;width:300px;height:352px;overflow:hidden;
+  border-radius:12px;background:var(--card);
+  box-shadow:0 0 0 1px var(--line);   /* border in the site's line colour */
+  isolation:isolate;
 }
 .spotify iframe{
-  display:block;width:100%;height:352px;border:0;
-  border-radius:12px;
-  background:transparent;
-  color-scheme:normal;                 /* no opaque box behind the iframe */
-  opacity:.75;                         /* lets the site's navy blend into Spotify's grey card */
+  position:absolute;left:0;top:0;width:300px;height:352px;border:0;
+  border-radius:12px;background:transparent;
+  color-scheme:normal;                /* no opaque box behind the iframe */
+  opacity:.75;                        /* lower = more navy, higher = more grey */
+  transform-origin:0 0;
+  transform:scale(var(--sp,1));       /* set by the small script in index.html */
 }
-.spotify-mobile{display:none}
-
-/* Phone: square player beside the photo, under the name */
+@media(max-width:860px){
+  .hero{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:24px;align-items:center}
+}
 @media(max-width:600px){
-  .hero-side{display:none}
-  .spotify-mobile{display:block;grid-column:2;grid-row:3;margin-top:8px;min-width:0;
-    width:min(100%,250px);aspect-ratio:1/1}   /* square: change 250px to resize */
-  .spotify-mobile iframe{height:100%;max-width:100%}
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);gap:12px;align-items:start;padding-top:12px}
+  .hero-copy{display:block}
+  .avatar{margin:0 0 8px}
+  .hero-side{padding-top:4px}
 }
