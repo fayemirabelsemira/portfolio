@@ -124,8 +124,8 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   /* Hero: photo beside name, no big image */
   .hero{display:block;padding-top:16px;padding-bottom:6px}
   .hero-demo{display:none}
-  .hero-copy{display:grid;grid-template-columns:68px 1fr;column-gap:14px;align-items:center}
-  .avatar{width:68px;height:68px;border-width:2px;margin:0;grid-row:1/4;align-self:center}
+  .hero-copy{display:grid;grid-template-columns:68px minmax(0,1fr);column-gap:14px;align-items:center}
+  .avatar{width:68px;height:68px;border-width:2px;margin:0;grid-row:1/4;align-self:start}
   .role{margin:0;align-self:end;font-size:.78rem}
   h1{font-size:1.7rem;align-self:start}
   .tagline,.stack,.open,.actions{grid-column:1/-1}
@@ -184,7 +184,7 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .wrap{padding:0 12px}
 
   .hero{padding-top:10px;padding-bottom:0}
-  .hero-copy{grid-template-columns:54px 1fr;column-gap:10px}
+  .hero-copy{grid-template-columns:54px minmax(0,1fr);column-gap:10px}
   .avatar{width:54px;height:54px}
   .role{font-size:.7rem}
   h1{font-size:1.35rem}
@@ -239,13 +239,14 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   border-radius:12px;
   background:transparent;
   color-scheme:normal;                 /* no opaque box behind the iframe */
-  opacity:.85;                         /* lets the site's navy blend into Spotify's grey card */
+  opacity:.75;                         /* lets the site's navy blend into Spotify's grey card */
 }
 .spotify-mobile{display:none}
 
-/* Phone: small player beside the photo, under the name */
+/* Phone: square player beside the photo, under the name */
 @media(max-width:600px){
   .hero-side{display:none}
-  .spotify-mobile{display:block;grid-column:2;grid-row:3;margin-top:8px;min-width:0}
-  .spotify-mobile iframe{height:80px}
+  .spotify-mobile{display:block;grid-column:2;grid-row:3;margin-top:8px;min-width:0;
+    width:min(100%,250px);aspect-ratio:1/1}   /* square: change 250px to resize */
+  .spotify-mobile iframe{height:100%;max-width:100%}
 }
