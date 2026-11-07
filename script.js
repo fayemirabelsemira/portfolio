@@ -1,46 +1,48 @@
 /* Edit your content here */
 const projects = [
   {
-    title: 'Jollibee Integrated Business Information System',
-    cat: 'Full-Stack', year: 2026,
-    text: 'An online ordering website paired with an operations dashboard.',
-    problem: '', // TODO: the problem that came up while building this
-    solution: '', // TODO: what you did to solve it
-    stack: 'HTML, CSS, JavaScript, PHP',
-    image: 'images/jollibee.jpg',
-    live: 'https://jollibeewebsite.infinityfreeapp.com/',
-    repo: 'https://github.com/fayemirabelsemira/jollibee_redesign',
-  },
+      title: 'Jollibee Integrated Business Information System',
+          cat: 'Full-Stack', year: 2026,
+          text: 'An online ordering website paired with an operations dashboard.',
+          problem: 'Building a single system that handled both customer-facing ordering and a complete back-office (inventory, suppliers, sales, employees, payroll, and accounting) while keeping data consistent across modules was the hardest part. Early versions had race conditions when stock was updated from orders and the ops dashboard at the same time.',
+          solution: 'Designed a clear data model with transaction-style updates and role-based views so the ordering side and the operations dashboard always stayed in sync. Separated the customer site from the admin/ops interface and added proper validation and status flows for every cycle (expenditure, revenue, HR, accounting).',
+          stack: 'HTML, CSS, JavaScript, PHP',
+          image: 'images/jollibee.jpg',
+          live: 'https://jollibeewebsite.infinityfreeapp.com/',
+          repo: 'https://github.com/fayemirabelsemira/jollibee_redesign',
+        },
+        {
+          title: "Sol's Collection",
+          cat: 'Full-Stack', year: 2026,
+          text: 'An online reading platform with a chapter reader and a writer studio.',
+          problem: 'Creating a smooth chapter-reading experience (progress tracking, bookmarks, comments) while also giving writers a usable studio to manage books and chapters, all on a serverless + Supabase stack, led to performance and auth headaches—especially with long chapter content and concurrent readers.',
+          solution: 'Used Supabase for auth, real-time comments, and progress storage, kept the chapter reader lightweight with client-side state, and built a simple writer studio that only loads the data a writer actually needs. Deployed on Cloudflare Workers for fast global delivery.',
+          stack: 'HTML, CSS, JavaScript, Supabase, Cloudflare',
+          image: 'images/sols.jpg',
+          live: 'https://sol.ladyysol.workers.dev/',
+          repo: 'https://github.com/fayemirabelsemira/sols-collection',
+        },
   {
-    title: "Sol's Collection",
-    cat: 'Full-Stack', year: 2026,
-    text: 'An online reading platform with a chapter reader and a writer studio.',
-    problem: '', // TODO: the problem that came up while building this
-    solution: '', // TODO: what you did to solve it
-    stack: 'HTML, CSS, JavaScript, Supabase, Cloudflare',
-    image: 'images/sols.jpg',
-    live: 'https://sol.ladyysol.workers.dev/',
-    repo: 'https://github.com/fayemirabelsemira/sols-collection',
-  },
-  {
-    title: 'Fabulous Bakery',
-    cat: 'Frontend', year: 2026,
-    text: 'A website for a homemade cookie and crinkle shop in Tagaytay, with a menu and ordering through Messenger or text.',
-    problem: '', // TODO: the problem that came up while building this
-    solution: '', // TODO: what you did to solve it
-    stack: 'React, Vercel',
-    image: 'images/fab-bakery.jpg',
-    live: 'https://fab-baker-boy-react.vercel.app/', repo: 'https://github.com/fayemirabelsemira/fab-baker-boy-react',
+      title: 'Fabulous Bakery',
+      cat: 'Frontend', year: 2026,
+      text: 'A website for a homemade cookie and crinkle shop in Tagaytay, with a menu and ordering through Messenger or text.',
+      problem: 'The real bakery had no polished online presence and relied on Facebook posts and Messenger for orders. Translating their warm, homemade feel into a modern React site while keeping the ordering flow extremely simple (no cart, just direct contact) was the main design challenge.',
+      solution: 'Built a clean React + Vite site focused on visuals and storytelling. Menu, photos, and reviews live in simple data arrays so the owner can update them easily. “Order” buttons open Messenger or SMS with a pre-filled message so customers can place orders in one tap without any complicated checkout.',
+      stack: 'React, Vercel',
+      image: 'images/fab-bakery.jpg',
+      live: 'https://fab-baker-boy-react.vercel.app/',
+      repo: 'https://github.com/fayemirabelsemira/fab-baker-boy-react',
   },
   {
     title: 'Rosario Poultry Farm',
     cat: 'Frontend', year: 2026,
-    text: 'A website for a poultry farm selling fresh eggs in small, medium and large sizes, with orders by SMS or WhatsApp.',
-    problem: '', // TODO: the problem that came up while building this
-    solution: '', // TODO: what you did to solve it
-    stack: 'Vercel',
-    image: 'images/rosario-poultry.jpg',
-    live: 'https://poultry-business.vercel.app/', repo: 'https://github.com/fayemirabelsemira/poultry_business',
+    text: 'A clean product and ordering site for a local egg supplier in Rosario, Batangas.',
+    problem: 'The farm needed a professional online presence that clearly showed egg sizes, pricing, and delivery coverage, while making it effortless for customers to order via SMS or WhatsApp.',
+    solution: 'Designed a simple, mobile-friendly landing page with clear product cards and one-tap “Order via SMS/WhatsApp” buttons that pre-fill the message. Focused on trust signals (location, delivery area, fresh-from-farm messaging) so first-time buyers feel confident.',
+    stack: 'React / Vite, Vercel',
+    image: 'images/poultry.jpg', // add this image
+    live: 'https://poultry-business.vercel.app/',
+    repo: 'https://github.com/fayemirabelsemira/poultry_business', 
   },
   {
     title: 'Nexus Analytics',
@@ -50,8 +52,8 @@ const projects = [
     solution: 'Nexus Analytics lets business owners easily upload, clean, analyze, visualize and export their data without requiring an account, while offering secure cloud storage for registered users.',
     stack: 'React, TypeScript, Tailwind CSS, Supabase',
     image: 'images/nexus-analytics.jpg',
-    live: '', // TODO: add the live link once it is deployed (the button stays hidden while this is empty)
-    repo: '', // TODO: add the GitHub link (the button stays hidden while this is empty)
+    live: 'https://poultry-business.vercel.app/', // NOTE: this is the Rosario Poultry Farm link; replace with the Nexus Analytics URL once it is deployed
+    repo: 'https://github.com/fayemirabelsemira/nexus-analytics',
   },
 ];
 
