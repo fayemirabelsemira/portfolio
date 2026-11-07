@@ -226,3 +226,11 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .foot{margin-top:14px;padding-top:8px;padding-bottom:14px;font-size:.7rem}
   .social{gap:10px;margin-bottom:4px;font-size:.72rem}
 }
+
+/* ===== Spotify player ===== */
+.spotify{margin-top:18px;max-width:420px;grid-column:1/-1}
+.spotify iframe{display:block;width:100%;height:152px;border:0}
+@media(max-width:600px){
+  .spotify{margin-top:8px;max-width:none}
+  .spotify iframe{height:80px}
+}
