@@ -256,3 +256,10 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .hero .actions{grid-column:1/-1;flex-wrap:nowrap;gap:10px;margin-top:14px}
   .hero .actions .btn{flex:1 1 0;min-width:0;padding:11px 8px;font-size:.9rem;white-space:nowrap}
 }
+
+/* ===== Phone: show the whole Case Study (the card text above is clipped to 1-2 lines, this text must not be) ===== */
+@media(max-width:600px){
+  .card details p{display:block;-webkit-line-clamp:unset;overflow:visible;font-size:.8rem;line-height:1.45}
+  .card details h4{font-size:.72rem;margin:8px 0 2px}
+  .card summary{font-size:.85rem;padding:6px 0}
+}
