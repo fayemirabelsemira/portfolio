@@ -263,3 +263,7 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .card details h4{font-size:.72rem;margin:8px 0 2px}
   .card summary{font-size:.85rem;padding:6px 0}
 }
+
+/* ===== Opening a Case Study only grows that card (the others keep their own height) =====
+   While every card is closed they stay equal height so the buttons line up. */
+.grid:has(details[open]){align-items:flex-start}
