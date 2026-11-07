@@ -42,6 +42,17 @@ const projects = [
     image: 'images/rosario-poultry.jpg',
     live: 'https://poultry-business.vercel.app/', repo: 'https://github.com/fayemirabelsemira/poultry_business',
   },
+  {
+    title: 'Nexus Analytics',
+    cat: 'Full-Stack', year: 2026,
+    text: 'A data analytics platform that turns messy sales and expense files into clean data, charts and reports.',
+    problem: 'Business owners have messy sales and expense files that are hard to clean, analyze and visualize.',
+    solution: 'Nexus Analytics lets business owners easily upload, clean, analyze, visualize and export their data without requiring an account, while offering secure cloud storage for registered users.',
+    stack: 'React, TypeScript, Tailwind CSS, Supabase',
+    image: 'images/nexus-analytics.jpg',
+    live: '', // TODO: add the live link once it is deployed (the button stays hidden while this is empty)
+    repo: '', // TODO: add the GitHub link (the button stays hidden while this is empty)
+  },
 ];
 
 const tech = [
