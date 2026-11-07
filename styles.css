@@ -19,7 +19,7 @@ img,video{max-width:100%;display:block}
 .muted{color:var(--mute)}
 
 /* Nav */
-.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .nav-in{max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:20px}
 .brand{font-weight:700;text-decoration:none;white-space:nowrap}
 .links{display:flex;gap:18px;margin-right:auto}
@@ -227,10 +227,15 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .social{gap:10px;margin-bottom:4px;font-size:.72rem}
 }
 
-/* ===== Spotify player ===== */
-.spotify{margin-top:18px;max-width:420px;grid-column:1/-1}
-.spotify iframe{display:block;width:100%;height:152px;border:0}
+/* ===== Hero right column + Spotify player ===== */
+.hero-side{display:grid;gap:20px;align-content:center;min-width:0}
+.spotify iframe{
+  display:block;width:100%;height:352px;border:0;
+  border-radius:12px;
+  background:transparent;
+  color-scheme:normal; /* removes the opaque box behind the iframe in Safari/Chrome */
+}
 @media(max-width:600px){
-  .spotify{margin-top:8px;max-width:none}
-  .spotify iframe{height:80px}
+  .hero-side{margin-top:10px}
+  .spotify iframe{height:152px} /* compact player on phones */
 }
