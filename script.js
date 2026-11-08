@@ -52,7 +52,7 @@ const projects = [
     solution: 'Nexus Analytics lets owners upload, clean, analyze, visualize and export their data without an account, with secure cloud storage for registered users.',
     stack: 'React, TypeScript, Tailwind CSS, Supabase',
     image: 'images/nexus-analytics.jpg',
-    live: 'https://poultry-business.vercel.app/', // NOTE: this is the Rosario Poultry Farm link; replace with the Nexus Analytics URL once it is deployed
+    live: 'https://nexus-analytics-xi.vercel.app/',
     repo: 'https://github.com/fayemirabelsemira/nexus-analytics',
   },
 ];
