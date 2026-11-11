@@ -68,6 +68,7 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
 .card .st{color:var(--mute);font-size:.92rem;margin-top:8px}
 .card details{margin-top:10px}
 .card summary{color:var(--accent);font-weight:600;cursor:pointer;padding:4px 0}
+.card details.case-btn>summary{display:none}
 .card details h4{font-size:.85rem;color:var(--accent);margin:10px 0 2px}
 .card details p{color:var(--mute);font-size:.93rem}
 .card .actions{margin-top:auto;padding-top:16px}
@@ -262,6 +263,8 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
   .card details p{display:block;-webkit-line-clamp:unset;overflow:visible;font-size:.8rem;line-height:1.45}
   .card details h4{font-size:.72rem;margin:8px 0 2px}
   .card summary{font-size:.85rem;padding:6px 0}
+  .card .actions [data-case]{flex:1 1 100%}
+  .card .actions .btn{white-space:nowrap}
 }
 
 /* ===== Opening a Case Study only grows that card (the others keep their own height) =====

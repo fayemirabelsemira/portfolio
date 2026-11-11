@@ -55,6 +55,18 @@ const projects = [
     live: 'https://nexus-analytics-xi.vercel.app/',
     repo: 'https://github.com/fayemirabelsemira/nexus-analytics',
   },
+  {
+    title: 'AI Lead System',
+    cat: 'AI Automation', year: 2026,
+    text: 'An AI lead assistant for small businesses in the Philippines that scores each inquiry and drafts a reply in English, Tagalog or Taglish.',
+    problem: 'Small business owners miss or reply late to website inquiries and lose customers, but fully automatic AI replies can make up prices or promises.',
+    solution: 'The AI scores each lead and drafts a reply using only the business\'s own info, with safety rules that block made-up facts. The owner approves, edits or rejects it from Telegram or a dashboard before anything is sent.',
+    stack: 'Node.js, Supabase (PostgreSQL), Groq AI, Telegram Bot API, Gmail',
+    image: 'images/ai-lead-system.jpg',
+    live: 'https://ai-lead-system-topaz.vercel.app/',
+    repo: 'https://github.com/fayemirabelsemira/ai-lead-system',
+    caseBtn: true,
+  },
 ];
 
 const tech = [
@@ -80,11 +92,12 @@ function render(filter) {
       <h3>${esc(p.title)}</h3>
       <p>${esc(p.text)}</p>
       <p class="st">Stack: ${esc(p.stack)}</p>
-      ${p.problem || p.solution ? `<details><summary>Case Study</summary>
+      ${p.problem || p.solution ? `<details${p.caseBtn ? ' class="case-btn"' : ''}><summary>Case Study</summary>
         ${p.problem ? `<h4>Problem that arose</h4><p>${esc(p.problem)}</p>` : ''}
         ${p.solution ? `<h4>Solution I made</h4><p>${esc(p.solution)}</p>` : ''}
       </details>` : ''}
       <div class="actions">
+        ${p.caseBtn ? `<button type="button" class="btn ghost" data-case aria-expanded="false">View Case Study</button>` : ''}
         ${real(p.live) ? `<a class="btn primary" href="${p.live}" target="_blank" rel="noreferrer">Live Demo</a>` : ''}
         ${real(p.repo) ? `<a class="btn ghost" href="${p.repo}" target="_blank" rel="noreferrer">Source Code</a>` : ''}
       </div>
@@ -95,6 +108,15 @@ document.querySelectorAll('.chip').forEach((b) => b.addEventListener('click', ()
   render(b.dataset.f);
 }));
 render('All');
+/* "View Case Study" button: opens/closes that card's Case Study */
+$('#grid').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-case]');
+  if (!b) return;
+  const d = b.closest('.card').querySelector('details');
+  d.open = !d.open;
+  b.textContent = d.open ? 'Hide Case Study' : 'View Case Study';
+  b.setAttribute('aria-expanded', d.open);
+});
 
 /* Skills */
 $('#tech').innerHTML = tech.map(([n, src, inv]) => `<li><img src="${src}" alt="" ${inv ? 'class="invert"' : ''} loading="lazy" />${n}</li>`).join('');
