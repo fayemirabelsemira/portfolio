@@ -88,6 +88,8 @@ h2{font-size:1.7rem;line-height:1.2;margin-bottom:16px}
 .edu div{border-left:3px solid var(--accent);padding-left:14px}
 .edu dt{color:var(--mute);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
 .edu dd{font-weight:600;margin-top:2px}
+.certs{display:flex;flex-wrap:wrap;gap:12px}
+.certs .cert{flex:1 1 280px}
 .cert{display:grid;gap:2px;max-width:420px;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .cert span{color:var(--accent);font-size:.9rem}
 
